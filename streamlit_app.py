@@ -18,8 +18,7 @@ st.markdown(
     }
     /* Background image for the entire page */
     .stApp {
-        background-image: URL('https://raw.githubusercontent.com/julianamendez11/chatbot2/main/ruta_a_la_imagen/montanas.png
-');
+        background-image: URL('https://raw.githubusercontent.com/julianamendez11/chatbot2/main/montañas.png');
         background-size: cover;
         background-position: center;
         background-attachment: fixed;
