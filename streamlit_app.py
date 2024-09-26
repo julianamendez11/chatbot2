@@ -9,7 +9,7 @@ st.markdown(
     display: flex;
     flex-direction: row;
     position: absolute;
-    top: 20px;
+    top: 0px;
     right: 20px;
 }
 .image-container img {
