@@ -41,7 +41,7 @@ else:
     # Cargar el archivo de Excel como contexto
     try:
         # Lee el archivo Excel. Asegúrate de que la ruta sea correcta y que "Sheet1" sea el nombre de la hoja
-        df = pd.read_excel("User Skills - Data Viz_Pipeline_Warehouse.xlsx", sheet_name="Sheet1")
+        df = pd.read_excel("User Skills - Data Viz_Pipeline_Warehouse.xlsx")
         
         # Convertir el contenido del Excel en un texto de contexto
         contexto = df.to_string(index=False)
