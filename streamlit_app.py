@@ -40,7 +40,7 @@ st.write(
 )
 
 # Create an OpenAI client.
-client = OpenAI(api_key="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")
+client = OpenAI(api_key="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")
 
 # Create a session state variable to store the chat messages. This ensures that the
 # messages persist across reruns.
@@ -63,7 +63,7 @@ if prompt := st.chat_input("What do you want to know about Cuesta Skills, Method
 
     # Generate a response using the OpenAI API.
     stream = client.chat.completions.create(
-        model="gpt-3.5-turbo",
+        model="gpt-4o-mini",
         messages=[
             {"role": m["role"], "content": m["content"]}
             for m in st.session_state.messages
