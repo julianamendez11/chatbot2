@@ -37,19 +37,7 @@ st.write(
 openai_api_key = st.text_input("Clave API de OpenAI", type="password")
 if not openai_api_key:
     st.info("Por favor, ingrese su clave API para continuar.", icon="🗝️")
-else:
-    # Cargar el archivo de Excel como contexto
-    try:
-        # Lee el archivo Excel. Asegúrate de que la ruta sea correcta y que "Sheet1" sea el nombre de la hoja
-        df = pd.read_excel("User Skills - Data Viz_Pipeline_Warehouse.xlsx")
-        
-        # Convertir el contenido del Excel en un texto de contexto
-        contexto = df.to_string(index=False)
-
-    except Exception as e:
-        st.error(f"Error al leer el archivo Excel: {e}")
-        st.stop()
-
+    
     # Crear el cliente de OpenAI
     openai.api_key = openai_api_key
 
