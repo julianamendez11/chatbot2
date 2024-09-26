@@ -41,9 +41,9 @@ st.write(
 
 # Ask user for their OpenAI API key via st.text_input.
     openai_api_key = st.text_input("OpenAI API Key", type="password")
-if not openai_api_key:
-    st.info("Please add your OpenAI API key to continue.", icon=":old_key:")
-else:
+    if not openai_api_key:
+        st.info("Please add your OpenAI API key to continue.", icon=":old_key:")
+    else:
     # Create an OpenAI client.
     client = OpenAI(api_key=openai_api_key)
     # Create a session state variable to store the chat messages. This ensures that the
