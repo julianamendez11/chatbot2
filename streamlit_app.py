@@ -2,29 +2,36 @@ import streamlit as st
 from openai import OpenAI
 from PIL import Image
 
+# CSS for background image and container styles
 st.markdown(
-"""
-<style>
-.image-container {
-    display: flex;
-    flex-direction: row;
-    position: absolute;
-    top: 0px;
-    right: 20px;
-}
-.image-container img {
-    margin-right: 10px;
-}
-</style>
-""",
-unsafe_allow_html=True
+    """
+    <style>
+    .image-container {
+        display: flex;
+        flex-direction: row;
+        position: absolute;
+        top: 0px;
+        right: 20px;
+    }
+    .image-container img {
+        margin-right: 10px;
+    }
+    /* Background image for the entire page */
+    .stApp {
+        background-image: url(montanas.jpg");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
 )
 
 with st.container():
     st.markdown('<div class="image-container">', unsafe_allow_html=True)
     st.image("cuesta-logo.png", use_column_width=False, width=250)
     st.markdown('</div>', unsafe_allow_html=True)
-
 
 # Show title and description.
 st.title("Cuesta AI Chatbot")
@@ -33,13 +40,10 @@ st.write(
 )
 
 # Ask user for their OpenAI API key via st.text_input.
-# Alternatively, you can store the API key in ./.streamlit/secrets.toml and access it
-# via st.secrets, see https://docs.streamlit.io/develop/concepts/connections/secrets-management
 openai_api_key = st.text_input("OpenAI API Key", type="password")
 if not openai_api_key:
     st.info("Please add your OpenAI API key to continue.", icon="🗝️")
 else:
-
     # Create an OpenAI client.
     client = OpenAI(api_key=openai_api_key)
 
