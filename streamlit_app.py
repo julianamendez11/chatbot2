@@ -30,7 +30,7 @@ st.markdown(
 
 with st.container():
     st.markdown('<div class="image-container">', unsafe_allow_html=True)
-    st.image("cuesta-logo.png", use_column_width=False, width=250)
+    st.image("logo.png", use_column_width=False, width=250)
     st.markdown('</div>', unsafe_allow_html=True)
 
 # Show title and description.
