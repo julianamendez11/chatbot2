@@ -1,5 +1,37 @@
 import streamlit as st
 from openai import OpenAI
+from PIL import Image
+
+# CSS para colocar la imagen encima del título, sin espacio entre ellos
+st.markdown(
+    """
+    <style>
+    .header-container {
+        display: flex
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 0px;
+    }
+    .header-container img {
+        width: 150px;
+        margin-bottom: 0px;
+    }
+    h1 {
+        margin-top: 0;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+# Carga la imagen del logo
+try:
+    logo = Image.open("cuesta-logo.png")  # Actualiza el path si es necesario
+except FileNotFoundError:
+    st.error("Image file not found. Please check the file path.")
+
 
 # Show title and description.
 st.title("💬 Chatbot")
