@@ -34,7 +34,7 @@ with st.container():
     st.markdown('</div>', unsafe_allow_html=True)
 
 # Show title and description.
-st.title("Cuesta AI Chatbot")
+st.title("CuesTalent")
 st.write(
     "This is a Cuesta chatbot that uses OpenAI's GPT-3.5 model to generate responses based on internal data. "
 )
@@ -59,7 +59,7 @@ else:
 
     # Create a chat input field to allow the user to enter a message. This will display
     # automatically at the bottom of the page.
-    if prompt := st.chat_input("What do you want to know about Cuesta Skills?"):
+    if prompt := st.chat_input("What do you want to know about Cuesta Skills, Methodologies, Industry/Function Expertise?"):
 
         # Store and display the current prompt.
         st.session_state.messages.append({"role": "user", "content": prompt})
