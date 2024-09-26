@@ -38,7 +38,7 @@ if not openai_api_key:
     st.info("Por favor, ingrese su clave API para continuar.", icon="🗝️")
 else:
     # Cargar el archivo de contexto
-    with open("contexto.txt", "r") as file:
+    with open("User Skills - Data Viz_Pipeline_Warehouse.xlsx", "r") as file:
         contexto = file.read()
 
     # Crear el cliente de OpenAI
@@ -60,7 +60,7 @@ else:
             st.markdown(message["content"])
 
     # Crear el campo de entrada para el chat
-    if prompt := st.chat_input("¿Qué te gustaría saber?"):
+    if prompt := st.chat_input("What would you like to know about Cuesta Skills?"):
 
         # Almacenar y mostrar el mensaje actual del usuario
         st.session_state.messages.append({"role": "user", "content": prompt})
