@@ -1,25 +1,23 @@
 import streamlit as st
-import openai
-import pandas as pd  # Librería para manejar archivos Excel
+from openai import OpenAI
 from PIL import Image
 
-# CSS para colocar el logo en la esquina superior derecha
 st.markdown(
-    """
-    <style>
-    .image-container {
-        display: flex;
-        flex-direction: row;
-        position: absolute;
-        top: 0px;
-        right: 20px;
-    }
-    .image-container img {
-        margin-right: 10px;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
+"""
+<style>
+.image-container {
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    top: 0px;
+    right: 20px;
+}
+.image-container img {
+    margin-right: 10px;
+}
+</style>
+""",
+unsafe_allow_html=True
 )
 
 with st.container():
@@ -27,52 +25,55 @@ with st.container():
     st.image("cuesta-logo.png", use_column_width=False, width=250)
     st.markdown('</div>', unsafe_allow_html=True)
 
-# Mostrar título y descripción
+
+# Show title and description.
 st.title("Cuesta AI Chatbot")
 st.write(
-    "Este es un chatbot Cuesta que utiliza el modelo GPT-3.5 de OpenAI para generar respuestas basadas en datos internos."
+    "This is a Cuesta chatbot that uses OpenAI's GPT-3.5 model to generate responses based on internal data. "
 )
 
-# Solicitar la clave de API de OpenAI al usuario
-openai_api_key = st.text_input("Clave API de OpenAI", type="password")
+# Ask user for their OpenAI API key via st.text_input.
+# Alternatively, you can store the API key in ./.streamlit/secrets.toml and access it
+# via st.secrets, see https://docs.streamlit.io/develop/concepts/connections/secrets-management
+openai_api_key = st.text_input("OpenAI API Key", type="password")
 if not openai_api_key:
-    st.info("Por favor, ingrese su clave API para continuar.", icon="🗝️")
-    
-    # Crear el cliente de OpenAI
-    openai.api_key = openai_api_key
+    st.info("Please add your OpenAI API key to continue.", icon="🗝️")
+else:
 
-    # Crear una variable en el estado de sesión para almacenar los mensajes del chat
+    # Create an OpenAI client.
+    client = OpenAI(api_key=openai_api_key)
+
+    # Create a session state variable to store the chat messages. This ensures that the
+    # messages persist across reruns.
     if "messages" not in st.session_state:
         st.session_state.messages = []
 
-        # Agregar el contexto como un mensaje inicial de `system`
-        st.session_state.messages.append({
-            "role": "system", 
-            "content": contexto  # Agrega el contenido del Excel aquí
-        })
-
-    # Mostrar los mensajes existentes del chat
+    # Display the existing chat messages via st.chat_message.
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
 
-    # Crear el campo de entrada para el chat
-    if prompt := st.chat_input("¿Qué te gustaría saber?"):
+    # Create a chat input field to allow the user to enter a message. This will display
+    # automatically at the bottom of the page.
+    if prompt := st.chat_input("What is up?"):
 
-        # Almacenar y mostrar el mensaje actual del usuario
+        # Store and display the current prompt.
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
             st.markdown(prompt)
 
-        # Generar una respuesta usando la API de OpenAI
-        response = openai.ChatCompletion.create(
+        # Generate a response using the OpenAI API.
+        stream = client.chat.completions.create(
             model="gpt-3.5-turbo",
-            messages=st.session_state.messages
+            messages=[
+                {"role": m["role"], "content": m["content"]}
+                for m in st.session_state.messages
+            ],
+            stream=True,
         )
 
-        # Obtener la respuesta del asistente y mostrarla
-        assistant_message = response['choices'][0]['message']['content']
-        st.session_state.messages.append({"role": "assistant", "content": assistant_message})
-
+        # Stream the response to the chat using st.write_stream, then store it in 
+        # session state.
         with st.chat_message("assistant"):
-            st.markdown(assistant_message)
+            response = st.write_stream(stream)
+        st.session_state.messages.append({"role": "assistant", "content": response})
