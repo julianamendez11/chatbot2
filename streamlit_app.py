@@ -18,7 +18,7 @@ st.markdown(
     }
     /* Background image for the entire page */
     .stApp {
-        background-image: montanas.png";
+        background-image: URL('montanas.png');
         background-size: cover;
         background-position: center;
         background-attachment: fixed;
