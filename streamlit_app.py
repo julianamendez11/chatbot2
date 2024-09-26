@@ -1,5 +1,6 @@
 import streamlit as st
 import openai
+import pandas as pd  # Librería para manejar archivos Excel
 from PIL import Image
 
 # CSS para colocar el logo en la esquina superior derecha
@@ -37,9 +38,17 @@ openai_api_key = st.text_input("Clave API de OpenAI", type="password")
 if not openai_api_key:
     st.info("Por favor, ingrese su clave API para continuar.", icon="🗝️")
 else:
-    # Cargar el archivo de contexto
-    with open("User Skills - Data Viz_Pipeline_Warehouse.xlsx", "r") as file:
-        contexto = file.read()
+    # Cargar el archivo de Excel como contexto
+    try:
+        # Lee el archivo Excel. Asegúrate de que la ruta sea correcta y que "Sheet1" sea el nombre de la hoja
+        df = pd.read_excel("User Skills - Data Viz_Pipeline_Warehouse.xlsx", sheet_name="Sheet1")
+        
+        # Convertir el contenido del Excel en un texto de contexto
+        contexto = df.to_string(index=False)
+
+    except Exception as e:
+        st.error(f"Error al leer el archivo Excel: {e}")
+        st.stop()
 
     # Crear el cliente de OpenAI
     openai.api_key = openai_api_key
@@ -51,7 +60,7 @@ else:
         # Agregar el contexto como un mensaje inicial de `system`
         st.session_state.messages.append({
             "role": "system", 
-            "content": contexto  # Agrega el contexto cargado aquí
+            "content": contexto  # Agrega el contenido del Excel aquí
         })
 
     # Mostrar los mensajes existentes del chat
@@ -60,7 +69,7 @@ else:
             st.markdown(message["content"])
 
     # Crear el campo de entrada para el chat
-    if prompt := st.chat_input("What would you like to know about Cuesta Skills?"):
+    if prompt := st.chat_input("¿Qué te gustaría saber?"):
 
         # Almacenar y mostrar el mensaje actual del usuario
         st.session_state.messages.append({"role": "user", "content": prompt})
