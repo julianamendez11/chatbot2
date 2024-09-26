@@ -40,29 +40,39 @@ if not openai_api_key:
     st.info("Please add your OpenAI API key to continue.", icon="🗝️")
 else:
 
-    # Create an OpenAI client.
-    client = OpenAI(api_key=openai_api_key)
-
-    # Create a session state variable to store the chat messages. This ensures that the
-    # messages persist across reruns.
+    # API Key de OpenAI
+    client = openai.OpenAI(api_key=openai_api_key)
+    
+    # Función para leer el archivo Excel y convertirlo en texto
+    def read_excel_as_context(file_path):
+        df = pd.read_excel(file_path)  # Lee el archivo de Excel
+        return df.to_string()  # Convierte el DataFrame en una representación textual
+    
+    # Cargar archivo de contexto (Excel)
+    context_file_path = "ruta/del/archivo.xlsx"  # Cambia esto a la ruta real de tu archivo
+    context_text = read_excel_as_context(context_file_path)  # Convertir el Excel a texto
+    
+    # Crear una variable en session_state para almacenar los mensajes
     if "messages" not in st.session_state:
         st.session_state.messages = []
-
-    # Display the existing chat messages via st.chat_message.
+    
+    # Agregar el contenido del archivo Excel al contexto
+    st.session_state.messages.append({"role": "system", "content": context_text})
+    
+    # Mostrar los mensajes existentes
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
-
-    # Create a chat input field to allow the user to enter a message. This will display
-    # automatically at the bottom of the page.
+    
+    # Crear un campo de entrada para el usuario
     if prompt := st.chat_input("What is up?"):
-
-        # Store and display the current prompt.
+    
+        # Almacenar y mostrar el prompt actual
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
             st.markdown(prompt)
-
-        # Generate a response using the OpenAI API.
+    
+        # Generar una respuesta usando la API de OpenAI
         stream = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
@@ -71,9 +81,8 @@ else:
             ],
             stream=True,
         )
-
-        # Stream the response to the chat using st.write_stream, then store it in 
-        # session state.
+    
+        # Mostrar la respuesta al chat usando st.write_stream, luego almacenarla en session_state
         with st.chat_message("assistant"):
             response = st.write_stream(stream)
         st.session_state.messages.append({"role": "assistant", "content": response})
