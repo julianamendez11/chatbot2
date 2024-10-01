@@ -40,7 +40,7 @@ st.write(
 )
 
 # Create an OpenAI client.
-client = OpenAI(api_key="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")
+client = OpenAI(api_key=st.secrets["API_KEY"])
 
 # Create a session state variable to store the chat messages. This ensures that the
 # messages persist across reruns.
